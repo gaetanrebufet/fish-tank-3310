@@ -3,9 +3,13 @@ namespace SpriteKind {
     export const Bubble = SpriteKind.create()
     export const Mask = SpriteKind.create()
 }
+statusbars.onZero(StatusBarKind.Health, function (status) {
+    music.setVolume(0)
+    game.over(false, effects.bubbles)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Bubble, function (sprite, otherSprite) {
     otherSprite.destroy(effects.bubbles, 500)
-    statusbar.value += 2
+    statusbar.value += 10
 })
 let aBubble: Sprite = null
 let statusbar: StatusBarSprite = null
@@ -29,7 +33,7 @@ let mySprite = sprites.create(img`
     . . . . . . . . . . c c c . . . 
     `, SpriteKind.Player)
 statusbar = statusbars.create(20, 4, StatusBarKind.Health)
-statusbar.value = 20
+statusbar.value = 100
 statusbar.setColor(2, 1)
 statusbar.setBarBorder(1, 2)
 statusbar.positionDirection(CollisionDirection.Top)
@@ -167,5 +171,5 @@ game.onUpdateInterval(500, function () {
         `, 0, -50)
     aBubble.setPosition(randint(32, 112), 80)
     aBubble.setKind(SpriteKind.Bubble)
-    statusbar.value += -1
+    statusbar.value += -5
 })
