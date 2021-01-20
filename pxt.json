@@ -1,0 +1,44 @@
+{
+    "name": "Fish Tank Escape 3310",
+    "description": "",
+    "dependencies": {
+        "device": "*",
+        "pxt-status-bar": "github:jwunderl/pxt-status-bar#v0.4.0"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "1.2.16",
+        "targetId": "arcade"
+    },
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "blocksprj",
+    "palette": [
+        "#000000",
+        "#c7f0d8",
+        "#43523d",
+        "#43523d",
+        "#43523d",
+        "#c7f0d8",
+        "#43523d",
+        "#c7f0d8",
+        "#43523d",
+        "#43523d",
+        "#c7f0d8",
+        "#43523d",
+        "#43523d",
+        "#43523d",
+        "#43523d",
+        "#000000"
+    ]
+}
