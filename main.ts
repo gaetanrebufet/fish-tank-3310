@@ -4,6 +4,20 @@ namespace SpriteKind {
     export const Mask = SpriteKind.create()
     export const Anchor = SpriteKind.create()
 }
+function initStatusBar () {
+    status_anchor = sprites.create(img`
+        . 
+        `, SpriteKind.Anchor)
+    status_anchor.setFlag(SpriteFlag.Ghost, true)
+    status_anchor.setPosition(34, 36)
+    statusbar = statusbars.create(20, 4, StatusBarKind.Health)
+    statusbar.attachToSprite(status_anchor)
+    statusbar.max = 100
+    statusbar.value = 100
+    statusbar.setColor(2, 1)
+    statusbar.setBarBorder(1, 2)
+    statusbar.positionDirection(CollisionDirection.Right)
+}
 statusbars.onZero(StatusBarKind.Health, function (status) {
     music.setVolume(0)
     game.over(false, effects.bubbles)
@@ -14,6 +28,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Bubble, function (sprite, otherS
 })
 let aBubble: Sprite = null
 let statusbar: StatusBarSprite = null
+let status_anchor: Sprite = null
 tiles.setTilemap(tilemap`level`)
 let background_sprite = sprites.create(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -140,17 +155,6 @@ let background_sprite = sprites.create(img`
 background_sprite.z = 1
 background_sprite.setFlag(SpriteFlag.Ghost, true)
 let bubble_list = sprites.allOfKind(SpriteKind.Bubble)
-let status_anchor = sprites.create(img`
-    . 
-    `, SpriteKind.Anchor)
-status_anchor.setFlag(SpriteFlag.Ghost, true)
-status_anchor.setPosition(34, 36)
-statusbar = statusbars.create(20, 4, StatusBarKind.Health)
-statusbar.value = 100
-statusbar.setColor(2, 1)
-statusbar.setBarBorder(1, 2)
-statusbar.positionDirection(CollisionDirection.Right)
-statusbar.attachToSprite(status_anchor)
 let mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . c c c c . . . . 
@@ -170,6 +174,7 @@ let mySprite = sprites.create(img`
     . . . . . . . . . . c c c . . . 
     `, SpriteKind.Player)
 controller.moveSprite(mySprite, 50, 50)
+initStatusBar()
 game.onUpdateInterval(500, function () {
     aBubble = sprites.createProjectileFromSide(img`
         . 3 . 
