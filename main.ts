@@ -4,6 +4,12 @@ namespace SpriteKind {
     export const Mask = SpriteKind.create()
     export const Anchor = SpriteKind.create()
 }
+controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+    mySprite.ay = -20
+    if (mySprite.vy == 0) {
+        mySprite.vy = -10
+    }
+})
 function initStatusBar () {
     status_anchor = sprites.create(img`
         . 
@@ -26,6 +32,21 @@ controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
     } else if (gameover) {
         game.reset()
     }
+})
+controller.down.onEvent(ControllerButtonEvent.Released, function () {
+    mySprite.ay = 0
+})
+controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+    mySprite.ax = -20
+    if (mySprite.vx == 0) {
+        mySprite.vx = -10
+    }
+})
+controller.right.onEvent(ControllerButtonEvent.Released, function () {
+    mySprite.ax = 0
+})
+controller.left.onEvent(ControllerButtonEvent.Released, function () {
+    mySprite.ax = 0
 })
 function setStartSplash () {
     splash = true
@@ -86,6 +107,15 @@ function setStartSplash () {
 statusbars.onZero(StatusBarKind.Health, function (status) {
     setLose()
 })
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    mySprite.ax = 20
+    if (mySprite.vx == 0) {
+        mySprite.vx = 10
+    }
+})
+controller.up.onEvent(ControllerButtonEvent.Released, function () {
+    mySprite.ay = 0
+})
 function isSplash () {
     if (splash || gameover) {
         return true
@@ -93,6 +123,12 @@ function isSplash () {
         return false
     }
 }
+controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+    mySprite.ay = 20
+    if (mySprite.vy == 0) {
+        mySprite.vy = -10
+    }
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Bubble, function (sprite, otherSprite) {
     otherSprite.destroy(effects.bubbles, 500)
     statusbar.value += 10
@@ -161,6 +197,7 @@ let splash = false
 let statusbar: StatusBarSprite = null
 let status_anchor: Sprite = null
 let gameover = false
+let mySprite: Sprite = null
 tiles.setTilemap(tilemap`level`)
 let background_sprite = sprites.create(img`
     ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
@@ -288,7 +325,7 @@ background_sprite.z = 1
 background_sprite.setFlag(SpriteFlag.Ghost, true)
 setStartSplash()
 let bubble_list = sprites.allOfKind(SpriteKind.Bubble)
-let mySprite = sprites.create(img`
+mySprite = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . c c c c . . . . 
     . . . . . . c c 1 1 1 1 c . . . 
@@ -306,7 +343,8 @@ let mySprite = sprites.create(img`
     . . . . . . 3 3 3 3 d d d c . . 
     . . . . . . . . . . c c c . . . 
     `, SpriteKind.Player)
-controller.moveSprite(mySprite, 50, 50)
+mySprite.fx = 20
+mySprite.fy = 20
 gameover = false
 game.onUpdateInterval(500, function () {
     if (!(isSplash())) {
@@ -332,8 +370,8 @@ game.onUpdateInterval(200, function () {
                 value.x += 1
             }
         } else {
-            for (let value of bubble_list) {
-                value.x += -1
+            for (let value2 of bubble_list) {
+                value2.x += -1
             }
         }
     }
