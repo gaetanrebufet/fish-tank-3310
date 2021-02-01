@@ -41,13 +41,27 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     if (mySprite.vx == 0) {
         mySprite.vx = -10
     }
+    animateLeft()
 })
 controller.right.onEvent(ControllerButtonEvent.Released, function () {
     mySprite.ax = 0
+    stopAnimation()
 })
 controller.left.onEvent(ControllerButtonEvent.Released, function () {
     mySprite.ax = 0
+    stopAnimation()
 })
+function animateRight () {
+    animation.runImageAnimation(
+    mySprite,
+    animation_right,
+    200,
+    true
+    )
+}
+function stopAnimation () {
+    animation.stopAnimation(animation.AnimationTypes.All, mySprite)
+}
 function setStartSplash () {
     splash = true
     startSplash = sprites.create(img`
@@ -112,6 +126,7 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (mySprite.vx == 0) {
         mySprite.vx = 10
     }
+    animateRight()
 })
 controller.up.onEvent(ControllerButtonEvent.Released, function () {
     mySprite.ay = 0
@@ -190,12 +205,22 @@ function setLose () {
     LostScreen.setPosition(73, 57)
     statusbar.destroy()
 }
+function animateLeft () {
+    animation.runImageAnimation(
+    mySprite,
+    animation_left,
+    200,
+    true
+    )
+}
 let aBubble: Sprite = null
 let LostScreen: Sprite = null
 let startSplash: Sprite = null
 let splash = false
 let statusbar: StatusBarSprite = null
 let status_anchor: Sprite = null
+let animation_right: Image[] = []
+let animation_left: Image[] = []
 let gameover = false
 let mySprite: Sprite = null
 tiles.setTilemap(tilemap`level`)
@@ -325,27 +350,12 @@ background_sprite.z = 1
 background_sprite.setFlag(SpriteFlag.Ghost, true)
 setStartSplash()
 let bubble_list = sprites.allOfKind(SpriteKind.Bubble)
-mySprite = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . c c c c . . . . 
-    . . . . . . c c 1 1 1 1 c . . . 
-    . . . . . c 1 1 1 1 1 1 3 . . . 
-    . . . . c 1 1 4 4 4 d c c . . . 
-    . . . c 4 d 4 4 4 4 4 1 c . c c 
-    . . c 4 4 4 1 4 4 4 4 d 1 c 4 c 
-    . c 4 4 4 4 1 1 4 4 4 4 1 c 4 c 
-    3 4 4 1 4 4 1 1 4 4 4 4 1 4 2 2 
-    3 4 4 4 2 4 1 c c 4 4 4 1 1 2 2 
-    3 4 4 4 4 4 1 4 4 1 4 4 d 1 2 2 
-    . 3 4 4 4 4 1 c 4 1 4 d 1 2 2 2 
-    . . 3 3 4 d 4 4 1 1 4 c 1 c . . 
-    . . . . 3 3 4 4 4 4 c d b c . . 
-    . . . . . . 3 3 3 3 d d d c . . 
-    . . . . . . . . . . c c c . . . 
-    `, SpriteKind.Player)
+mySprite = sprites.create(assets.image`fish`, SpriteKind.Player)
 mySprite.fx = 20
 mySprite.fy = 20
 gameover = false
+animation_left = assets.animation`animate_left`
+animation_right = assets.animation`animate_right`
 game.onUpdateInterval(500, function () {
     if (!(isSplash())) {
         aBubble = sprites.createProjectileFromSide(img`
