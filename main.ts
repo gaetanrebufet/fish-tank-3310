@@ -50,6 +50,15 @@ controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
         game.reset()
     }
 })
+function bubbleSound () {
+    if (light2) {
+        music.playTone(175, music.beat(BeatFraction.Quarter))
+        music.playTone(349, music.beat(BeatFraction.Quarter))
+    } else {
+        music.playTone(349, music.beat(BeatFraction.Quarter))
+        music.playTone(175, music.beat(BeatFraction.Quarter))
+    }
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     switchColors()
 })
@@ -154,6 +163,7 @@ function setStartSplash () {
     startSplash.z = 1
     startSplash.setFlag(SpriteFlag.Ghost, true)
     startSplash.setPosition(73, 57)
+    music.magicWand.play()
 }
 statusbars.onZero(StatusBarKind.Health, function (status) {
     setLose()
@@ -192,10 +202,11 @@ function switchColors () {
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Bubble, function (sprite, otherSprite) {
     otherSprite.destroy(effects.bubbles, 500)
+    bubbleSound()
     if (light2) {
         statusbar.value += 10
     } else {
-        statusbar.value += -10
+        statusbar.value += -20
     }
 })
 function setLose () {
@@ -254,6 +265,8 @@ function setLose () {
     LostScreen.setFlag(SpriteFlag.Ghost, true)
     LostScreen.setPosition(73, 57)
     statusbar.destroy()
+    music.stopAllSounds()
+    music.wawawawaa.play()
 }
 function animateLeft () {
     animation.runImageAnimation(
@@ -412,6 +425,7 @@ animation_right = assets.animation`animate_right`
 nokia_bright = color.__rgb(199, 240, 216)
 nokia_dark = color.__rgb(67, 82, 61)
 setBrightPalette()
+music.setVolume(20)
 light2 = true
 game.onUpdateInterval(5000, function () {
     if (!(isSplash())) {
