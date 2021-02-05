@@ -4,6 +4,23 @@ namespace SpriteKind {
     export const Mask = SpriteKind.create()
     export const Anchor = SpriteKind.create()
 }
+function setBrightPalette () {
+    color.setColor(1, nokia_bright)
+    color.setColor(2, nokia_dark)
+    color.setColor(3, nokia_dark)
+    color.setColor(4, nokia_dark)
+    color.setColor(5, nokia_bright)
+    color.setColor(6, nokia_dark)
+    color.setColor(7, nokia_bright)
+    color.setColor(8, nokia_dark)
+    color.setColor(9, nokia_dark)
+    color.setColor(10, nokia_bright)
+    color.setColor(11, nokia_dark)
+    color.setColor(12, nokia_dark)
+    color.setColor(13, nokia_dark)
+    color.setColor(14, nokia_dark)
+    color.setColor(15, color.rgb(0, 0, 0))
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     mySprite.ay = -20
     if (mySprite.vy == 0) {
@@ -33,12 +50,15 @@ controller.anyButton.onEvent(ControllerButtonEvent.Pressed, function () {
         game.reset()
     }
 })
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    switchColors()
+})
 controller.down.onEvent(ControllerButtonEvent.Released, function () {
     mySprite.ay = 0
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    mySprite.ax = -20
-    if (mySprite.vx == 0) {
+    mySprite.ax = -30
+    if (mySprite.vx >= 0) {
         mySprite.vx = -10
     }
     animateLeft()
@@ -61,6 +81,23 @@ function animateRight () {
 }
 function stopAnimation () {
     animation.stopAnimation(animation.AnimationTypes.All, mySprite)
+}
+function setDarkPalette () {
+    color.setColor(1, nokia_dark)
+    color.setColor(2, nokia_bright)
+    color.setColor(3, nokia_bright)
+    color.setColor(4, nokia_bright)
+    color.setColor(5, nokia_dark)
+    color.setColor(6, nokia_bright)
+    color.setColor(7, nokia_dark)
+    color.setColor(8, nokia_bright)
+    color.setColor(9, nokia_bright)
+    color.setColor(10, nokia_dark)
+    color.setColor(11, nokia_bright)
+    color.setColor(12, nokia_bright)
+    color.setColor(13, nokia_bright)
+    color.setColor(14, nokia_bright)
+    color.setColor(15, color.rgb(0, 0, 0))
 }
 function setStartSplash () {
     splash = true
@@ -122,8 +159,8 @@ statusbars.onZero(StatusBarKind.Health, function (status) {
     setLose()
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    mySprite.ax = 20
-    if (mySprite.vx == 0) {
+    mySprite.ax = 30
+    if (mySprite.vx <= 0) {
         mySprite.vx = 10
     }
     animateRight()
@@ -144,9 +181,22 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         mySprite.vy = -10
     }
 })
+function switchColors () {
+    if (light2) {
+        setDarkPalette()
+        light2 = false
+    } else {
+        setBrightPalette()
+        light2 = true
+    }
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Bubble, function (sprite, otherSprite) {
     otherSprite.destroy(effects.bubbles, 500)
-    statusbar.value += 10
+    if (light2) {
+        statusbar.value += 10
+    } else {
+        statusbar.value += -10
+    }
 })
 function setLose () {
     gameover = true
@@ -219,6 +269,9 @@ let startSplash: Sprite = null
 let splash = false
 let statusbar: StatusBarSprite = null
 let status_anchor: Sprite = null
+let light2 = false
+let nokia_dark = 0
+let nokia_bright = 0
 let animation_right: Image[] = []
 let animation_left: Image[] = []
 let gameover = false
@@ -356,6 +409,10 @@ mySprite.fy = 20
 gameover = false
 animation_left = assets.animation`animate_left`
 animation_right = assets.animation`animate_right`
+nokia_bright = color.__rgb(199, 240, 216)
+nokia_dark = color.__rgb(67, 82, 61)
+setBrightPalette()
+light2 = true
 game.onUpdateInterval(500, function () {
     if (!(isSplash())) {
         aBubble = sprites.createProjectileFromSide(img`
@@ -370,7 +427,11 @@ game.onUpdateInterval(500, function () {
 })
 game.onUpdateInterval(100, function () {
     if (!(splash)) {
-        statusbar.value += -1
+        if (light2) {
+            statusbar.value += -1
+        } else {
+            statusbar.value += 1
+        }
     }
 })
 game.onUpdateInterval(200, function () {
