@@ -413,6 +413,11 @@ nokia_bright = color.__rgb(199, 240, 216)
 nokia_dark = color.__rgb(67, 82, 61)
 setBrightPalette()
 light2 = true
+game.onUpdateInterval(5000, function () {
+    if (!(isSplash())) {
+        switchColors()
+    }
+})
 game.onUpdateInterval(500, function () {
     if (!(isSplash())) {
         aBubble = sprites.createProjectileFromSide(img`
