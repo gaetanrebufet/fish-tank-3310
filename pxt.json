@@ -1,5 +1,6 @@
 {
     "name": "Fish Tank 3310",
+    "version": "1.0.0",
     "description": "",
     "dependencies": {
         "device": "*",
